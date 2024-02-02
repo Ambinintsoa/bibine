@@ -53,6 +53,11 @@ public class PurchaseService {
         return purchaseRepository.findAllActiveValid(id, PageRequest.of(offset, limit)).getContent();
     }
 
+    public List<PurchaseEntity> getAllPurchaseValidTrans(Long id, int offset, int limit) {
+
+        return purchaseRepository.findAlltransValid(id, PageRequest.of(offset, limit)).getContent();
+    }
+
     public List<PurchaseEntity> getAllSent(Long id, int offset, int limit) {
 
         return purchaseRepository.findAllSent(id, PageRequest.of(offset, limit)).getContent();
@@ -71,6 +76,12 @@ public class PurchaseService {
             idannonce[i] = annonces.get(i).getId();
         }
         return purchaseRepository.findAllValid(idannonce, PageRequest.of(offset, limit)).getContent();
+    }
+
+    public Long page(Long id, int state, int limit) {
+        long number = purchaseRepository.countAllValid(id, state);
+        return (number + limit - 1) / limit;
+
     }
 
     public Optional<PurchaseEntity> getById(String id) {

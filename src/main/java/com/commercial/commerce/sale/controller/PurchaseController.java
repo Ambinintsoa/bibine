@@ -126,6 +126,65 @@ public class PurchaseController extends Controller {
         }
     }
 
+    @GetMapping("/user/{iduser}/count/accepted")
+    public ResponseEntity<ApiResponse<Long>> getCountValid(HttpServletRequest request,
+            @RequestParam(name = "limit", defaultValue = "5") int limit,
+            @PathVariable Long iduser) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            return createResponseEntity(purchaseService.page(iduser, limit, 2), "Purchases retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @GetMapping("/user/{iduser}/count/purchases_with_transaction")
+    public ResponseEntity<ApiResponse<Long>> countAllValidTrans(HttpServletRequest request,
+            @RequestParam(name = "limit", defaultValue = "5") int limit,
+            @PathVariable Long iduser) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            return createResponseEntity(purchaseService.page(iduser, 3, limit), "Purchases retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @GetMapping("/user/{iduser}/purchases_with_transaction")
+    public ResponseEntity<ApiResponse<List<PurchaseEntity>>> getAllValidTrans(HttpServletRequest request,
+            @RequestParam(name = "offset") int id,
+            @RequestParam(name = "limit", defaultValue = "5") int limit,
+            @PathVariable Long iduser) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            List<PurchaseEntity> annonces = purchaseService.getAllPurchaseValidTrans(iduser, id, limit);
+            for (PurchaseEntity purchaseEntity : annonces) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
+            return createResponseEntity(annonces, "Purchases retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
     @GetMapping("/actu/purchases/{id}")
     public ResponseEntity<ApiResponse<PurchaseEntity>> getPurchaseById(@PathVariable String id
 
@@ -205,7 +264,7 @@ public class PurchaseController extends Controller {
         }
     }
 
-    @PutMapping("/actu/valid/purchases/{id}")
+    @PutMapping("/valid/purchases/{id}")
     public ResponseEntity<ApiResponse<PurchaseEntity>> validePurchase(@PathVariable String id
 
     ) {
@@ -221,7 +280,7 @@ public class PurchaseController extends Controller {
         }
     }
 
-    @PutMapping("/actu/unvalid/purchases/{id}")
+    @PutMapping("/unvalid/purchases/{id}")
     public ResponseEntity<ApiResponse<PurchaseEntity>> unvalidePurchase(@PathVariable String id
 
     ) {
@@ -237,7 +296,7 @@ public class PurchaseController extends Controller {
         }
     }
 
-    @PutMapping("/actu/accept/purchases/{id}")
+    @PutMapping("/accept/purchases/{id}")
     public ResponseEntity<ApiResponse<PurchaseEntity>> acceptPurchase(@PathVariable String id,
             HttpServletRequest request) {
         try {
