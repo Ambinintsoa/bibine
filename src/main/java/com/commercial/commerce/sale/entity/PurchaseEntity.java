@@ -26,7 +26,7 @@ public class PurchaseEntity {
     private String id;
 
     @Column(name = "idannouncement")
-    private String announcement;
+    private String annonce;
 
     @ManyToOne
     @JoinColumn(name = "iduser", referencedColumnName = "id")

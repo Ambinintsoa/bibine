@@ -38,7 +38,7 @@ public class PurchaseService {
     private RefreshTokenService refreshTokenService;
 
     public PurchaseEntity insert(PurchaseEntity annonce) {
-        annonce.setId(purchaseRepository.insertCustom(annonce.getAnnouncement(), annonce.getUser().getId(),
+        annonce.setId(purchaseRepository.insertCustom(annonce.getAnnonce(), annonce.getUser().getId(),
                 annonce.getMontant()));
         annonce.setUser(userRepository.findById(annonce.getUser().getId()).get());
         return annonce;
@@ -85,7 +85,7 @@ public class PurchaseService {
         TransactionEntity transaction = new TransactionEntity();
         purchase = purchaseRepository.findById(purchase.getId()).get();
         System.out.println("PurchaseService.achat()");
-        AnnonceEntity annonceEntity = annonceService.getById(purchase.getAnnouncement());
+        AnnonceEntity annonceEntity = annonceService.getById(purchase.getAnnonce());
         transaction.setPurchase(purchase);
         transaction.setReceiver(userRepository.findById(user).get());
         System.out.println("PurchaseService.achat()");

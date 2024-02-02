@@ -42,7 +42,7 @@ public class PurchaseController extends Controller {
     public ResponseEntity<ApiResponse<PurchaseEntity>> save(HttpServletRequest request,
             @Valid @RequestBody PurchaseEntity purchase, @PathVariable Long iduser) {
         try {
-            AnnonceEntity annonceEntity = annonceService.getById(purchase.getAnnouncement());
+            AnnonceEntity annonceEntity = annonceService.getById(purchase.getAnnonce());
 
             if (this.isTokenValidAchat(refreshTokenService.splitToken(request.getHeader("Authorization")),
                     annonceEntity.getVendeur().getIdvendeur()) == true) {
@@ -76,7 +76,7 @@ public class PurchaseController extends Controller {
             purchaseEntity = purchaseService.getById(purchaseEntity.getId()).get();
             purchaseService.updateState(purchaseEntity, 3);
 
-            AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnouncement());
+            AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnonce());
             annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
             TransactionEntity createdAnnonce = purchaseService.achat(purchaseEntity,
                     annonce.getVendeur().getIdvendeur());
