@@ -72,16 +72,17 @@ public class PurchaseController extends Controller {
                         .body(new ApiResponse<>(null, new Status("error", "not the user"),
                                 LocalDateTime.now()));
             }
-
+            System.out.print("tafiditra");
             purchaseEntity = purchaseService.getById(purchaseEntity.getId()).get();
             purchaseService.updateState(purchaseEntity, 3);
 
             AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnonce());
             ;
             annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
+            purchaseEntity.setDate(new Date(System.currentTimeMillis()));
             TransactionEntity createdAnnonce = purchaseService.achat(purchaseEntity,
                     annonce.getVendeur().getIdvendeur());
-            return createResponseEntity(createdAnnonce, "Purchase created successfully");
+            return createResponseEntity(createdAnnonce, "Transaction created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
@@ -179,6 +180,48 @@ public class PurchaseController extends Controller {
                 purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
             }
             return createResponseEntity(annonces, "Purchases retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @GetMapping("/user/{iduser}/annonce/{id}/purchases")
+    public ResponseEntity<ApiResponse<List<PurchaseEntity>>> getAllPurchases(HttpServletRequest request,
+            @RequestParam(name = "offset") int offset,
+            @RequestParam(name = "limit", defaultValue = "5") int limit, @PathVariable Long iduser,
+            @PathVariable String id) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            List<PurchaseEntity> annonces = purchaseService.getAllPurchase(iduser, id, offset, limit);
+            for (PurchaseEntity purchaseEntity : annonces) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
+            return createResponseEntity(annonces, "Purchases retrieved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @GetMapping("/user/{iduser}/annonce/{id}/count_purchases")
+    public ResponseEntity<ApiResponse<Long>> countAllPurchases(HttpServletRequest request,
+            @RequestParam(name = "limit", defaultValue = "5") int limit, @PathVariable Long iduser,
+            @PathVariable String id) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            return createResponseEntity(purchaseService.pageByAnnonce(iduser, id, limit),
+                    "Purchases retrieved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));

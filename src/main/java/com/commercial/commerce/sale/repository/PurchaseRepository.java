@@ -40,6 +40,12 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, String
         @Query(value = "SELECT * FROM purchase WHERE state = 2 and iduser = :user ORDER BY CAST(SUBSTRING(idpurchase FROM 4) AS INTEGER)", countQuery = "SELECT count(*) FROM purchase WHERE state = 2 and iduser = :user", nativeQuery = true)
         Page<PurchaseEntity> findAllActiveValid(@Param("user") Long user, Pageable pageable);
 
+        @Query(value = "SELECT * FROM purchase WHERE  iduser = :user and idannouncement=:id ORDER BY CAST(SUBSTRING(idpurchase FROM 4) AS INTEGER)", countQuery = "SELECT count(*) FROM purchase WHERE idannouncement=:id  and  iduser = :user", nativeQuery = true)
+        Page<PurchaseEntity> findAllByAnnonce(@Param("user") Long user, @Param("id") String id, Pageable pageable);
+
+        @Query(value = "SELECT count(*) FROM purchase WHERE idannouncement=:id  and  iduser = :user", nativeQuery = true)
+        Long countAllByAnnonce(@Param("user") Long user, @Param("id") String id);
+
         @Query(value = "SELECT count(*) FROM purchase WHERE state = :state and iduser = :user", nativeQuery = true)
         Long countAllValid(@Param("user") Long user, @Param("state") int state);
 

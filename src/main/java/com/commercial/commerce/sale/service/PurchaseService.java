@@ -58,6 +58,11 @@ public class PurchaseService {
         return purchaseRepository.findAlltransValid(id, PageRequest.of(offset, limit)).getContent();
     }
 
+    public List<PurchaseEntity> getAllPurchase(Long id, String annonce, int offset, int limit) {
+
+        return purchaseRepository.findAllByAnnonce(id, annonce, PageRequest.of(offset, limit)).getContent();
+    }
+
     public List<PurchaseEntity> getAllSent(Long id, int offset, int limit) {
 
         return purchaseRepository.findAllSent(id, PageRequest.of(offset, limit)).getContent();
@@ -80,6 +85,12 @@ public class PurchaseService {
 
     public Long page(Long id, int state, int limit) {
         long number = purchaseRepository.countAllValid(id, state);
+        return (number + limit - 1) / limit;
+
+    }
+
+    public Long pageByAnnonce(Long id, String annonce, int limit) {
+        long number = purchaseRepository.countAllByAnnonce(id, annonce);
         return (number + limit - 1) / limit;
 
     }
