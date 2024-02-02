@@ -132,13 +132,13 @@ public class AnnonceService {
 
     public Optional<AnnonceEntity> validate(String id) {
 
-        this.updateAnnonceValidity(id, 1);
+        this.updateAnnonceValidity(id, 0);
         return annonceRepository.findById(id);
     }
 
     public Optional<AnnonceEntity> unvalidate(String id) {
 
-        this.updateAnnonceValidity(id, 0);
+        this.updateAnnonceValidity(id, 1);
         return annonceRepository.findById(id);
     }
 
