@@ -226,9 +226,32 @@ public class PurchaseController extends Controller {
 
     ) {
         try {
+
             PurchaseEntity categories = purchaseService.getById(id).get();
             purchaseService.updateState(categories, 0);
             return createResponseEntity(categories, "purchase  updated successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @PutMapping("/actu/accept/purchases/{id}")
+    public ResponseEntity<ApiResponse<PurchaseEntity>> acceptPurchase(@PathVariable String id,
+            HttpServletRequest request) {
+        try {
+            PurchaseEntity purchaseEntity = purchaseService.getById(id).get();
+            AnnonceEntity annonceEntity = annonceService.getById(purchaseEntity.getAnnonce());
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    annonceEntity.getVendeur().getIdvendeur()) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+
+            purchaseService.updateState(purchaseEntity, 2);
+            return createResponseEntity(purchaseEntity, "purchase  updated successfully");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
