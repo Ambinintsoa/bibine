@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import com.commercial.commerce.sale.entity.AnnonceEntity;
@@ -80,4 +81,6 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
     List<Statistique> countAllByModele();
 
     List<AnnonceEntity> findByDescriptionContainingIgnoreCase(String motCle);
+
+    List<AnnonceEntity> finBy(TextCriteria criteria);
 }
