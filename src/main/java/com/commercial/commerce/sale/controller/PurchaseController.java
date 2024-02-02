@@ -71,7 +71,7 @@ public class PurchaseController extends Controller {
             }
 
             purchaseEntity = purchaseService.getById(purchaseEntity.getId()).get();
-            purchaseService.updateState(purchaseEntity, 2);
+            purchaseService.updateState(purchaseEntity, 3);
 
             AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnouncement());
             annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
