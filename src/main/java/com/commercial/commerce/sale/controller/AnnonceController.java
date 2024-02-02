@@ -283,17 +283,12 @@ public class AnnonceController extends Controller {
         }
     }
 
-    @GetMapping("/actu/type/count")
-    public ResponseEntity<ApiResponse<Count>> getTypeAnnonceCount(HttpServletRequest request,
-            @PathVariable Long iduser) {
+    @GetMapping("/actu/types/{idtype}/pagination")
+    public ResponseEntity<ApiResponse<Long>> getTypePagination(
+            @RequestParam(name = "limit", defaultValue = "5") int limit) {
         try {
-            int state = 2;
-            Count count = new Count();
-            count.setOwn_annonce(annonceService.getAnnoncesByVendeurCount(iduser));
-            count.setVendu(annonceService.getAnnoncesByVendeurCount(iduser, state));
-            count.setFavoris(annonceService.getAnnoncesByFavorisCount(iduser));
-            return createResponseEntity(count,
-                    "Announcement retrieved successfully");
+
+            return createResponseEntity(annonceService.pagination(limit), "annonces retrieved successfully");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)

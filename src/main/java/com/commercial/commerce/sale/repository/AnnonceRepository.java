@@ -20,6 +20,8 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     Long countByVendeur_Idvendeur(Long idVendeur);
 
+    Long countByModeleTypeId(String idtype);
+
     Long countByVendeur_IdvendeurAndState(Long idVendeur, int state);
 
     List<AnnonceEntity> findByVendeurIdvendeur(Long idvendeur);

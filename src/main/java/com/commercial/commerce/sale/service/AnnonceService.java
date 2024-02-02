@@ -142,6 +142,11 @@ public class AnnonceService {
         return annonceRepository.findById(id);
     }
 
+    public long pagination(String type, int limit) {
+        long number = annonceRepository.countByModeleTypeId(type);
+        return (number + limit - 1) / limit;
+    }
+
     public AnnonceEntity removeFavoris(Long user, String annonceId) {
         AnnonceEntity annonce = annonceRepository.findById(annonceId).orElse(null);
 
