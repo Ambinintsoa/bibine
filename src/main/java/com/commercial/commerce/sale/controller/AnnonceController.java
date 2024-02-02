@@ -283,6 +283,24 @@ public class AnnonceController extends Controller {
         }
     }
 
+    @GetMapping("/actu/type/count")
+    public ResponseEntity<ApiResponse<Count>> getTypeAnnonceCount(HttpServletRequest request,
+            @PathVariable Long iduser) {
+        try {
+            int state = 2;
+            Count count = new Count();
+            count.setOwn_annonce(annonceService.getAnnoncesByVendeurCount(iduser));
+            count.setVendu(annonceService.getAnnoncesByVendeurCount(iduser, state));
+            count.setFavoris(annonceService.getAnnoncesByFavorisCount(iduser));
+            return createResponseEntity(count,
+                    "Announcement retrieved successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
     @GetMapping("/actu/type/{idtype}/annonces")
     public ResponseEntity<ApiResponse<List<AnnonceEntity>>> getAnnonceType(HttpServletRequest request,
             @RequestParam(name = "offset", defaultValue = "0") int id,

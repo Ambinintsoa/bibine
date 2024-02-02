@@ -92,6 +92,9 @@ public class PurchaseController extends Controller {
     public ResponseEntity<ApiResponse<List<PurchaseEntity>>> getAllPurchases() {
         try {
             List<PurchaseEntity> categories = purchaseService.getAllPurchase();
+            for (PurchaseEntity purchaseEntity : categories) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
             return createResponseEntity(categories, "Purchases retrieved successfully");
 
         } catch (Exception e) {
@@ -113,6 +116,9 @@ public class PurchaseController extends Controller {
                                 LocalDateTime.now()));
             }
             List<PurchaseEntity> annonces = purchaseService.getAllPurchaseValid(iduser, id, limit);
+            for (PurchaseEntity purchaseEntity : annonces) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
             return createResponseEntity(annonces, "Purchases retrieved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
@@ -126,6 +132,7 @@ public class PurchaseController extends Controller {
     ) {
         try {
             PurchaseEntity categories = purchaseService.getById(id).get();
+            categories.setBody(annonceService.getById(categories.getAnnonce()));
             return createResponseEntity(categories, "Purchases retrieved successfully");
 
         } catch (Exception e) {
@@ -205,6 +212,7 @@ public class PurchaseController extends Controller {
         try {
             PurchaseEntity categories = purchaseService.getById(id).get();
             purchaseService.updateState(categories, 2);
+
             return createResponseEntity(categories, "purchase  updated successfully");
 
         } catch (Exception e) {
@@ -231,7 +239,6 @@ public class PurchaseController extends Controller {
     @GetMapping("/statistique/purchases/sent")
     public ResponseEntity<ApiResponse<List<Statistique>>> countSoldCarsTypes() {
         try {
-
             return createResponseEntity(purchaseService.statPurchase(),
                     "Annonces retrieved successfully for the given state");
 
