@@ -48,6 +48,7 @@ public class AnnonceEntity {
     private MotorEntity motor;
 
     private double etat;
+    private double validity;
 
     private int state;
     @TextIndexed

@@ -130,6 +130,18 @@ public class AnnonceService {
         return annonceRepository.findById(id);
     }
 
+    public Optional<AnnonceEntity> validate(String id) {
+
+        this.updateAnnonceValidity(id, 1);
+        return annonceRepository.findById(id);
+    }
+
+    public Optional<AnnonceEntity> unvalidate(String id) {
+
+        this.updateAnnonceValidity(id, 0);
+        return annonceRepository.findById(id);
+    }
+
     public AnnonceEntity removeFavoris(Long user, String annonceId) {
         AnnonceEntity annonce = annonceRepository.findById(annonceId).orElse(null);
 
@@ -381,6 +393,19 @@ public class AnnonceService {
         if (existingAnnonce.isPresent()) {
             AnnonceEntity updatedAnnonce = existingAnnonce.get();
             updatedAnnonce.setState(newState);
+
+            return Optional.of(annonceRepository.save(updatedAnnonce));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<AnnonceEntity> updateAnnonceValidity(String id, int newState) {
+        Optional<AnnonceEntity> existingAnnonce = annonceRepository.findById(id);
+
+        if (existingAnnonce.isPresent()) {
+            AnnonceEntity updatedAnnonce = existingAnnonce.get();
+            updatedAnnonce.setValidity(newState);
 
             return Optional.of(annonceRepository.save(updatedAnnonce));
         } else {

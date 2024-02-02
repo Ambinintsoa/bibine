@@ -334,6 +334,54 @@ public class AnnonceController extends Controller {
         }
     }
 
+    @PutMapping("/user/{iduser}/annonces/{id}/valide")
+    public ResponseEntity<ApiResponse<AnnonceEntity>> updateAnnonceValid(HttpServletRequest request,
+            @PathVariable String id, @PathVariable Long iduser) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            Optional<AnnonceEntity> existingAnnonce = annonceService.validate(id);
+
+            if (existingAnnonce.isPresent()) {
+                return createResponseEntity(existingAnnonce.get(), "Annonce state updated successfully");
+            } else {
+                return createResponseEntity(null, "Annonce not found");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
+    @PutMapping("/user/{iduser}/annonces/{id}/unvalide")
+    public ResponseEntity<ApiResponse<AnnonceEntity>> updateAnnonceUnvalide(HttpServletRequest request,
+            @PathVariable String id, @PathVariable Long iduser) {
+        try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
+            Optional<AnnonceEntity> existingAnnonce = annonceService.unvalidate(id);
+
+            if (existingAnnonce.isPresent()) {
+                return createResponseEntity(existingAnnonce.get(), "Annonce state updated successfully");
+            } else {
+                return createResponseEntity(null, "Annonce not found");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new Status("error", e.getMessage()), LocalDateTime.now()));
+        }
+    }
+
     @GetMapping("/actu/annonces_vendu")
     public ResponseEntity<ApiResponse<List<AnnonceEntity>>> getAnnoncesByState() {
         try {
