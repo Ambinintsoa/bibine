@@ -177,4 +177,19 @@ public class AuthService {
                 throw new Exception("somme non-valid");
 
         }
+
+        public Optional<User> transaction(Long id, double sum) {
+                User user = repository.findById(id).get();
+                if (user != null) {
+                        if (user.getCompte() == null) {
+                                user.setCompte(0.0);
+                        }
+                        user.setCompte(user.getCompte() + sum);
+                        ;
+                        return Optional.of(repository.save(user));
+                } else {
+                        return Optional.empty();
+                }
+
+        }
 }

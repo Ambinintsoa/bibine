@@ -74,14 +74,14 @@ public class PurchaseController extends Controller {
             }
             System.out.print("tafiditra");
             purchaseEntity = purchaseService.getById(purchaseEntity.getId()).get();
-            purchaseService.updateState(purchaseEntity, 3);
 
             AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnonce());
-            ;
-            annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
+
             purchaseEntity.setDate(new Date(System.currentTimeMillis()));
             TransactionEntity createdAnnonce = purchaseService.achat(purchaseEntity,
                     annonce.getVendeur().getIdvendeur());
+            annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
+            purchaseService.updateState(purchaseEntity, 3);
             return createResponseEntity(createdAnnonce, "Transaction created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
