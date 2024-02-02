@@ -77,6 +77,7 @@ public class PurchaseController extends Controller {
             purchaseService.updateState(purchaseEntity, 3);
 
             AnnonceEntity annonce = annonceService.getById(purchaseEntity.getAnnonce());
+            ;
             annonce = annonceService.updateAnnonceState(annonce.getId(), 2).get();
             TransactionEntity createdAnnonce = purchaseService.achat(purchaseEntity,
                     annonce.getVendeur().getIdvendeur());
@@ -105,6 +106,12 @@ public class PurchaseController extends Controller {
             @RequestParam(name = "limit", defaultValue = "5") int limit,
             @PathVariable Long iduser) {
         try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
             List<PurchaseEntity> annonces = purchaseService.getAllPurchaseValid(iduser, id, limit);
             return createResponseEntity(annonces, "Purchases retrieved successfully");
         } catch (Exception e) {
@@ -133,7 +140,16 @@ public class PurchaseController extends Controller {
             @RequestParam(name = "limit", defaultValue = "5") int limit,
             @PathVariable Long iduser) {
         try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
             List<PurchaseEntity> annonces = purchaseService.selectPurchase(iduser, id, limit);
+            for (PurchaseEntity purchaseEntity : annonces) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
             return createResponseEntity(annonces, "Purchases retrieved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
@@ -147,7 +163,16 @@ public class PurchaseController extends Controller {
             @RequestParam(name = "limit", defaultValue = "5") int limit,
             @PathVariable Long iduser) {
         try {
+            if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                    iduser) == false) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>(null, new Status("error", "not the user"),
+                                LocalDateTime.now()));
+            }
             List<PurchaseEntity> annonces = purchaseService.getAllSent(iduser, id, limit);
+            for (PurchaseEntity purchaseEntity : annonces) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
             return createResponseEntity(annonces, "Purchases retrieved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)
@@ -162,6 +187,9 @@ public class PurchaseController extends Controller {
         try {
 
             List<PurchaseEntity> types = purchaseService.selectWithPagination(id, limit);
+            for (PurchaseEntity purchaseEntity : types) {
+                purchaseEntity.setBody(annonceService.getById(purchaseEntity.getAnnonce()));
+            }
             return createResponseEntity(types, "Purchases retrieved successfully");
 
         } catch (Exception e) {
