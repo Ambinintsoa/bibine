@@ -91,10 +91,11 @@ public class PurchaseService {
         System.out.println("PurchaseService.achat()");
         purchase.setUser(userRepository.findById(purchase.getUser().getId()).get());
         if (purchase.getUser().getCompte() != null
-                && purchase.getUser().getCompte() >= annonceEntity.getPrix() + annonceEntity.getCommission()) {
-            authService.recharge(purchase.getUser().getId(), -annonceEntity.getPrix());
+                && purchase.getUser().getCompte() >= annonceEntity.getPrix()) {
+            authService.recharge(purchase.getUser().getId(),
+                    -annonceEntity.getPrix());
             authService.recharge(userRepository.findById(user).get().getId(),
-                    annonceEntity.getPrix());
+                    annonceEntity.getPrix() - ((annonceEntity.getCommission() * 100) / annonceEntity.getPrix()));
             transaction.setSender(purchase.getUser());
             transaction.setDate(new Date(System.currentTimeMillis()));
             transaction = transactionService.insert(transaction);

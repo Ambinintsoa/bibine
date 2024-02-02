@@ -82,5 +82,5 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     List<AnnonceEntity> findByDescriptionContainingIgnoreCase(String motCle);
 
-    List<AnnonceEntity> finBy(TextCriteria criteria);
+    // List<AnnonceEntity> finBy(TextCriteria criteria);
 }

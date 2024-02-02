@@ -1,5 +1,6 @@
 package com.commercial.commerce.sale.controller;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -42,12 +43,14 @@ public class PurchaseController extends Controller {
             @Valid @RequestBody PurchaseEntity purchase, @PathVariable Long iduser) {
         try {
             AnnonceEntity annonceEntity = annonceService.getById(purchase.getAnnouncement());
+
             if (this.isTokenValidAchat(refreshTokenService.splitToken(request.getHeader("Authorization")),
                     annonceEntity.getVendeur().getIdvendeur()) == true) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ApiResponse<>(null, new Status("error", "cannot buy your own car"),
                                 LocalDateTime.now()));
             }
+            purchase.setDate(new Date(System.currentTimeMillis()));
             purchase.setUser(new User());
             purchase.getUser().setId(iduser);
             PurchaseEntity createdAnnonce = purchaseService.insert(purchase);
