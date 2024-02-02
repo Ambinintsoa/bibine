@@ -115,18 +115,19 @@ public class PurchaseService {
         System.out.println(purchase.getUser().getCompte());
         System.out.println(annonceEntity.getPrix());
         if (purchase.getUser().getCompte() != null
-                && purchase.getUser().getCompte() >= annonceEntity.getPrix()) {
+                && purchase.getUser().getCompte() >= purchase.getMontant()) {
             System.out.println("PurchaseService.achat()");
             authService.transaction(purchase.getUser().getId(),
-                    -annonceEntity.getPrix());
+                    -purchase.getMontant());
             authService.transaction(userRepository.findById(user).get().getId(),
-                    annonceEntity.getPrix() - ((annonceEntity.getCommission() * 100) / annonceEntity.getPrix()));
+                    purchase.getMontant() - ((annonceEntity.getCommission() * 100) / purchase.getMontant()));
             transaction.setSender(purchase.getUser());
             transaction.setDate(new Date(System.currentTimeMillis()));
             transaction = transactionService.insert(transaction);
             return transaction;
+        } else {
+            throw new Exception("solde non valide");
         }
-        throw new Exception("solde non valide");
 
     }
 
