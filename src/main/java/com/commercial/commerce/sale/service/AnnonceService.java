@@ -14,6 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 import com.commercial.commerce.UserAuth.Models.User;
 import com.commercial.commerce.UserAuth.Service.AuthService;
@@ -42,6 +47,22 @@ public class AnnonceService {
     private AuthService authService;
     @Autowired
     private AnnonceRepositoryImpl annonceRepositoryImpl;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    public List<AnnonceEntity> recherchePleinTexte(String termeRecherche) {
+        Criteria criteria = new Criteria();
+        criteria.orOperator(
+                Criteria.where("modele.brand.nom").regex(termeRecherche, "i"),
+                Criteria.where("modele.nom").regex(termeRecherche, "i"),
+                Criteria.where("maintenance.nom").regex(termeRecherche, "i"),
+                Criteria.where("modele.type.nom").regex(termeRecherche, "i"),
+                Criteria.where("description").regex(termeRecherche, "i"));
+
+        Query query = new Query(criteria).with(Sort.by(Sort.Order.desc("score")));
+        return mongoTemplate.find(query, AnnonceEntity.class);
+    }
 
     public List<AnnonceEntity> getAllEntity() {
         List<AnnonceEntity> annonces = annonceRepository.findAllByState(1);
@@ -223,7 +244,7 @@ public class AnnonceService {
         return annonce;
     }
 
-    public List<AnnonceEntity> getRecentAnnonces(int offset , int limit) {
+    public List<AnnonceEntity> getRecentAnnonces(int offset, int limit) {
         Sort sortByDateDesc = Sort.by(Sort.Direction.DESC, "date");
         Pageable pageable = PageRequest.of(offset, limit, sortByDateDesc);
         List<AnnonceEntity> annonce = annonceRepository.findAll(pageable).getContent();
@@ -320,8 +341,9 @@ public class AnnonceService {
         List<AnnonceEntity> entity1 = null;
         List<AnnonceEntity> entity = null;
         if (parametre.getDescription() != null && parametre.getDescription() != "") {
-            entity = annonceRepository
-                    .findByDescriptionContainingIgnoreCase(parametre.getDescription());
+            // entity = annonceRepository
+            // .findByDescriptionContainingIgnoreCase(parametre.getDescription());
+            entity = this.recherchePleinTexte(parametre.getDescription());
 
         }
         if (parametre.getDateInf() != null && parametre.getDateSup() != null) {
