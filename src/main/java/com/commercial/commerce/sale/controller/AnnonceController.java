@@ -465,10 +465,10 @@ public class AnnonceController extends Controller {
 
     @GetMapping("/actu/annonces/recentes")
     public ResponseEntity<ApiResponse<List<AnnonceEntity>>> getRecentAnnonces(
+            @RequestParam(name = "offset", defaultValue = "0") int page,
             @RequestParam(name = "limit", defaultValue = "5") int limit) {
         try {
-            List<AnnonceEntity> annonces = annonceService.getRecentAnnonces(limit); // Récupère les 5 annonces les plus
-            // récentes
+            List<AnnonceEntity> annonces = annonceService.getRecentAnnonces(page, limit);
             return createResponseEntity(annonces, "Announcement retrieved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK)

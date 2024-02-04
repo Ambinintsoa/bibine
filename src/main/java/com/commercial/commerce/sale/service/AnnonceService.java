@@ -223,9 +223,9 @@ public class AnnonceService {
         return annonce;
     }
 
-    public List<AnnonceEntity> getRecentAnnonces(int limit) {
+    public List<AnnonceEntity> getRecentAnnonces(int offset , int limit) {
         Sort sortByDateDesc = Sort.by(Sort.Direction.DESC, "date");
-        Pageable pageable = PageRequest.of(0, limit, sortByDateDesc);
+        Pageable pageable = PageRequest.of(offset, limit, sortByDateDesc);
         List<AnnonceEntity> annonce = annonceRepository.findAll(pageable).getContent();
         User userEntity = null;
         for (AnnonceEntity annonceEntity : annonce) {
