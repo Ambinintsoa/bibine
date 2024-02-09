@@ -15,7 +15,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, String> {
 
-        @Query(value = "INSERT INTO transaction (idpurchase,idreceiver,idsender) VALUES (:purchase ,:receiver,:sender ) RETURNING idtransaction", nativeQuery = true)
+        @Query(value = "INSERT INTO transaction (idpurchase,idreceiver,idsender,date) VALUES (:purchase ,:receiver,:sender,now() ) RETURNING idtransaction", nativeQuery = true)
         String insertCustom(@Param("purchase") String purchase, @Param("receiver") Long receiver,
                         @Param("sender") Long sendder);
 
