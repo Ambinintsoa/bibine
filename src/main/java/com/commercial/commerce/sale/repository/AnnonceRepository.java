@@ -24,6 +24,8 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     Long countByVendeur_IdvendeurAndState(Long idVendeur, int state);
 
+    Long countByVendeur_IdvendeurAndStateNotIn(Long idVendeur, List<Integer> state);
+
     List<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state);
 
     Page<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state, Pageable pageable);
