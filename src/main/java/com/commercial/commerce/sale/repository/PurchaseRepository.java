@@ -34,7 +34,7 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, String
                         "ORDER BY all_months.month", nativeQuery = true)
         List<Object[]> getStatsPerMonth();
 
-        @Query(value = "SELECT * FROM purchase WHERE state = 1 AND iduser =:user", nativeQuery = true)
+        @Query(value = "SELECT * FROM purchase  AND iduser =:user", nativeQuery = true)
         Page<PurchaseEntity> findAllSent(@Param("user") Long user, Pageable pageable);
 
         @Query(value = "SELECT * FROM purchase WHERE state = 2 and iduser = :user ORDER BY CAST(SUBSTRING(idpurchase FROM 4) AS INTEGER)", countQuery = "SELECT count(*) FROM purchase WHERE state = 2 and iduser = :user", nativeQuery = true)
