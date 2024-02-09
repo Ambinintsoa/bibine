@@ -16,4 +16,6 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     @Query(value = "{'receiverEmail' :  ?0}",sort = "{'date' : -1 }" )
     List<Message> findByReceiverEmailOrderByDateDesc(String receiverEmail, Pageable pageable);
 
+    @Query(value = "{'SenderId' : ?0 ,'receiverEmail' :  ?1}",sort = "{'date' : -1 }" )
+    List<Message> findBySenderIdAndReceiverEmailOrderByDateDesc(String SenderId, String ReceiverEmail,Pageable Pageable);
 }

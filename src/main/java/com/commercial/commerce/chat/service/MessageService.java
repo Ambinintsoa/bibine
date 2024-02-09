@@ -26,6 +26,10 @@ public class MessageService {
         return messageRepository.findByReceiverEmailOrderByDateDesc(receiverEmail,pageable);
     }
 
+    public List<Message> getDiscu(String SenderId,String receiverEmail, Pageable pageable){
+        return messageRepository.findBySenderIdAndReceiverEmailOrderByDateDesc(SenderId,receiverEmail,pageable);
+    }
+
     public List<Message> getAllMessage() {
         return messageRepository.findAll();
     }

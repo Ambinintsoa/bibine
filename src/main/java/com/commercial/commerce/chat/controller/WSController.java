@@ -55,5 +55,11 @@ public class WSController {
         return messageService.getDiscussion(user1,user2);
     }
 
+    @GetMapping("/discussion/{senderId}/{receiverEmail}")
+    public List<Message> getNotif(@PathVariable String senderId,@PathVariable String receiverEmail){
+        Pageable pageable = PageRequest.of(0,10);
+        return messageService.getDiscu(senderId,receiverEmail,pageable);
+    }
+
 
 }
