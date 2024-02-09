@@ -143,7 +143,7 @@ CREATE  TABLE make (
     ('Jeep'),
     ('Volkswagen'),
     ('Hyundai'),
-    ('Porsche'),
+    -- ('Porsche'),
 --    ('Lexus'),
     -- ('Maserati'),
     -- ('Subaru'),
@@ -168,6 +168,8 @@ CREATE  TABLE model (
     CONSTRAINT fk_type FOREIGN KEY ( idtype ) REFERENCES type( idtype ) ,
     CONSTRAINT fk_make FOREIGN KEY ( idmake ) REFERENCES make( idmake ) 
  );
+ INSERT INTO model (name, release_date, places_number, doors_number, idtype, idmake)
+VALUES ('3008', '2021-01-01', 5, 4, 'TPE3', 'MKE32'),
 INSERT INTO model (name, release_date, places_number, doors_number, idtype, idmake)
 VALUES
     ('C3', '2022-01-01', 5, 4, 'TPE1', 'MKE21'),

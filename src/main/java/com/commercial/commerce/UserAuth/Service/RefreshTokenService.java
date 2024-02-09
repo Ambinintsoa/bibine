@@ -29,7 +29,7 @@ public class RefreshTokenService {
         // System.out.println("Time = " + Instant.now().plusMillis(60000 * 60 * 0));
         RefreshToken token = RefreshToken.builder().user(userRepository.findByEmail(userEmail).get())
                 .token(UUID.randomUUID().toString()).expireDate(
-                        Instant.now().plusSeconds(1296000))// add 3h for EAT //10h ony
+                        Instant.now().plusSeconds(5 * 24 * 60 * 60 * 1000))// add 3h for EAT //10h ony
                 .build();
 
         return refreshTokenRepository.save(token);
