@@ -50,10 +50,7 @@ public class WSController {
         return messageService.getContact(email);
     }
 
-    @PostMapping("/discussion")
-    public List<Message> getDiscussion(@RequestBody String user1, @RequestBody String user2){
-        return messageService.getDiscussion(user1,user2);
-    }
+
 
     @GetMapping("/discussion/{senderId}/{receiverEmail}")
     public List<Message> getNotif(@PathVariable String senderId,@PathVariable String receiverEmail){
