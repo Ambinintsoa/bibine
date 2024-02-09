@@ -187,6 +187,12 @@ public class AnnonceService {
     public List<AnnonceEntity> getAnnoncesByFavoris(Long user, int offset, int limit) {
         List<AnnonceEntity> annonce = annonceRepository.findByFavorisAndState(user, 1, PageRequest.of(offset, limit))
                 .getContent();
+        User userEntity = null;
+        for (AnnonceEntity annonceEntity : annonce) {
+            userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
+            annonceEntity.getVendeur().setNom(userEntity.getName());
+            annonceEntity.getVendeur().setProfile(userEntity.getProfile());
+        }
         return annonce;
     }
 
@@ -220,8 +226,16 @@ public class AnnonceService {
     }
 
     public List<AnnonceEntity> getAnnoncesByVendeurPaginer(Long idVendeur, int state, int offset, int limit) {
-        return annonceRepository.findAllByVendeur_IdvendeurAndState(idVendeur, state, PageRequest.of(offset, limit))
+        List<AnnonceEntity> annonce = annonceRepository
+                .findAllByVendeur_IdvendeurAndState(idVendeur, state, PageRequest.of(offset, limit))
                 .getContent();
+        User userEntity = null;
+        for (AnnonceEntity annonceEntity : annonce) {
+            userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
+            annonceEntity.getVendeur().setNom(userEntity.getName());
+            annonceEntity.getVendeur().setProfile(userEntity.getProfile());
+        }
+        return annonce;
     }
 
     public Long getAnnoncesByVendeurPage(Long iduser, int limit) {
