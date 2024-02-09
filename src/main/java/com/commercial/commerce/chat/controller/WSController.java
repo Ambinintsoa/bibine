@@ -52,10 +52,10 @@ public class WSController {
 
 
 
-    @GetMapping("/discussion/{senderId}/{receiverEmail}")
-    public List<Message> getNotif(@PathVariable String senderId,@PathVariable String receiverEmail){
+    @GetMapping("/discussion/{senderEmail}/{receiverEmail}")
+    public List<Message> getNotif(@PathVariable String senderEmail,@PathVariable String receiverEmail){
         Pageable pageable = PageRequest.of(0,10);
-        return messageService.getDiscu(senderId,receiverEmail,pageable);
+        return messageService.getDiscu(senderEmail,receiverEmail,pageable);
     }
 
 

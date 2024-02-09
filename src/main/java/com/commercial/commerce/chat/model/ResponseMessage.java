@@ -3,10 +3,9 @@ package com.commercial.commerce.chat.model;
 public class ResponseMessage {
 
     private String content;
-
     private String senderId;
     private String senderName;
-    private String picturePath;
+    private String senderPicturePath;
 
     public ResponseMessage() {
     }
@@ -19,7 +18,7 @@ public class ResponseMessage {
         this.content = content;
         this.senderId = senderId;
         this.senderName = senderName;
-        this.picturePath = picturePath;
+        this.senderPicturePath = picturePath;
     }
 
     public String getContent() {
@@ -47,10 +46,10 @@ public class ResponseMessage {
     }
 
     public String getPicturePath() {
-        return picturePath;
+        return senderPicturePath;
     }
 
     public void setPicturePath(String picturePath) {
-        this.picturePath = picturePath;
+        this.senderPicturePath = picturePath;
     }
 }

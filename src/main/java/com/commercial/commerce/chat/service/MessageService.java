@@ -26,8 +26,14 @@ public class MessageService {
         return messageRepository.findByReceiverEmailOrderByDateDesc(receiverEmail,pageable);
     }
 
-    public List<Message> getDiscu(String SenderId,String receiverEmail, Pageable pageable){
-        return messageRepository.findBySenderIdAndReceiverEmailOrderByDateDesc(SenderId,receiverEmail,pageable);
+    public List<Message> getDiscu(String SenderEmail,String receiverEmail, Pageable pageable){
+        List<Message> list = messageRepository.findBySenderEmailAndReceiverEmailOrderByDateDesc(SenderEmail,receiverEmail,pageable);
+
+        if(list.isEmpty()){
+            System.out.println("nulllllllllllllllll");
+            list = messageRepository.findBySenderEmailAndReceiverEmailOrderByDateDesc(receiverEmail,SenderEmail,pageable);
+        }
+        return list;
     }
 
     public List<Message> getAllMessage() {
@@ -59,9 +65,9 @@ public class MessageService {
                     : message.getSenderId();
             Message lastMessage = utilisateurAvecEchange.get(autreUser);
             if (lastMessage == null) {
-                utilisateurAvecEchange.put(autreUser, new Message(message.getSenderId(), message.getSenderName(),
-                        message.getReceiverEmail(), message.getContent(), message.getDate(),
-                        message.getPicturePath()));
+                utilisateurAvecEchange.put(autreUser, new Message(message.getSenderId(), message.getSenderName(),message.getSenderEmail(),
+                        message.getSenderPicturePath(),message.getReceiverId(),message.getReceiverEmail(),message.getReceiverPicturePath() ,message.getContent(), message.getDate()
+                        ));
             } else {
                 if (message.getDate().compareTo(lastMessage.getDate()) > 0) {
                     lastMessage.setContent(message.getContent());
