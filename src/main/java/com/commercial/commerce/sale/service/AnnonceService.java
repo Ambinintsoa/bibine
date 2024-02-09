@@ -482,7 +482,7 @@ public class AnnonceService {
     }
 
     public Long getAnnoncesByVendeurCount(Long idVendeur) {
-        return annonceRepository.countByVendeur_Idvendeur(idVendeur);
+        return annonceRepository.countByVendeur_IdvendeurAndState(idVendeur, 1);
     }
 
     public List<AnnonceEntity> intersect(List<AnnonceEntity> list1, List<AnnonceEntity> list2) {
