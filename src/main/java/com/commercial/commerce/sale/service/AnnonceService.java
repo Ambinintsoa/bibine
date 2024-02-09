@@ -57,6 +57,7 @@ public class AnnonceService {
                 Criteria.where("modele.brand.nom").regex(termeRecherche, "i"),
                 Criteria.where("modele.nom").regex(termeRecherche, "i"),
                 Criteria.where("maintenance.nom").regex(termeRecherche, "i"),
+                Criteria.where("motor.nom").regex(termeRecherche, "i"),
                 Criteria.where("couleur.nom").regex(termeRecherche, "i"),
                 Criteria.where("modele.type.nom").regex(termeRecherche, "i"),
                 Criteria.where("description").regex(termeRecherche, "i"));
