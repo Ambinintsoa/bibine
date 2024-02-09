@@ -183,6 +183,12 @@ public class AnnonceService {
 
     public List<AnnonceEntity> getAnnoncesByFavoris(Long user) {
         List<AnnonceEntity> annonce = annonceRepository.findByFavorisAndState(user, 1);
+        User userEntity = null;
+        for (AnnonceEntity annonceEntity : annonce) {
+            userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
+            annonceEntity.getVendeur().setNom(userEntity.getName());
+            annonceEntity.getVendeur().setProfile(userEntity.getProfile());
+        }
         return annonce;
     }
 
@@ -261,6 +267,12 @@ public class AnnonceService {
     public List<AnnonceEntity> getByType(String type, int offset, int limit) {
         List<AnnonceEntity> annonce = annonceRepository
                 .findByModeleTypeIdAndState(type, 1, PageRequest.of(offset, limit)).getContent();
+        User userEntity = null;
+        for (AnnonceEntity annonceEntity : annonce) {
+            userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
+            annonceEntity.getVendeur().setNom(userEntity.getName());
+            annonceEntity.getVendeur().setProfile(userEntity.getProfile());
+        }
         return annonce;
     }
 
