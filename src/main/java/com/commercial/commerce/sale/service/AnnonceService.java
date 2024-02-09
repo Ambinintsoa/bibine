@@ -180,12 +180,13 @@ public class AnnonceService {
     }
 
     public List<AnnonceEntity> getAnnoncesByFavoris(Long user) {
-        List<AnnonceEntity> annonce = annonceRepository.findByFavoris(user);
+        List<AnnonceEntity> annonce = annonceRepository.findByFavorisAndState(user, 1);
         return annonce;
     }
 
     public List<AnnonceEntity> getAnnoncesByFavoris(Long user, int offset, int limit) {
-        List<AnnonceEntity> annonce = annonceRepository.findByFavoris(user, PageRequest.of(offset, limit)).getContent();
+        List<AnnonceEntity> annonce = annonceRepository.findByFavorisAndState(user, 1, PageRequest.of(offset, limit))
+                .getContent();
         return annonce;
     }
 
@@ -196,7 +197,7 @@ public class AnnonceService {
 
     public List<AnnonceEntity> getAnnoncesByVendeur(Long user, int offset, int limit) {
         List<AnnonceEntity> annonce = annonceRepository
-                .findByVendeurIdvendeur(user, PageRequest.of(offset, limit)).getContent();
+                .findByVendeurIdvendeurAndState(user, 1, PageRequest.of(offset, limit)).getContent();
         User userEntity = null;
         for (AnnonceEntity annonceEntity : annonce) {
             userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
@@ -208,7 +209,7 @@ public class AnnonceService {
 
     public List<AnnonceEntity> getAnnoncesByVendeur(Long user) {
         List<AnnonceEntity> annonce = annonceRepository
-                .findByVendeurIdvendeur(user);
+                .findByVendeurIdvendeurAndState(user, 1);
         User userEntity = null;
         for (AnnonceEntity annonceEntity : annonce) {
             userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
@@ -240,14 +241,14 @@ public class AnnonceService {
 
     public List<AnnonceEntity> getByType(String type, int offset, int limit) {
         List<AnnonceEntity> annonce = annonceRepository
-                .findByModeleTypeId(type, PageRequest.of(offset, limit)).getContent();
+                .findByModeleTypeIdAndState(type, 1, PageRequest.of(offset, limit)).getContent();
         return annonce;
     }
 
     public List<AnnonceEntity> getRecentAnnonces(int offset, int limit) {
-        Sort sortByDateDesc = Sort.by(Sort.Direction.DESC, "date");
-        Pageable pageable = PageRequest.of(offset, limit, sortByDateDesc);
-        List<AnnonceEntity> annonce = annonceRepository.findAll(pageable).getContent();
+        int status = 1;
+        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "date"));
+        List<AnnonceEntity> annonce = annonceRepository.findAllByState(status, pageable).getContent();
         User userEntity = null;
         for (AnnonceEntity annonceEntity : annonce) {
             userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();

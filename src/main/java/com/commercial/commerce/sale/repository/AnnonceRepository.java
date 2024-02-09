@@ -12,9 +12,9 @@ import com.commercial.commerce.sale.utils.Statistique;
 
 public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String> {
 
-    List<AnnonceEntity> findByFavoris(Long user);
+    List<AnnonceEntity> findByFavorisAndState(Long user, int state);
 
-    Page<AnnonceEntity> findByFavoris(Long user, Pageable pageable);
+    Page<AnnonceEntity> findByFavorisAndState(Long user, int state, Pageable pageable);
 
     Long countByFavoris(Long userId);
 
@@ -24,11 +24,11 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     Long countByVendeur_IdvendeurAndState(Long idVendeur, int state);
 
-    List<AnnonceEntity> findByVendeurIdvendeur(Long idvendeur);
+    List<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state);
 
-    Page<AnnonceEntity> findByVendeurIdvendeur(Long idvendeur, Pageable pageable);
+    Page<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state, Pageable pageable);
 
-    Page<AnnonceEntity> findByModeleTypeId(String idtype, Pageable pageable);
+    Page<AnnonceEntity> findByModeleTypeIdAndState(String idtype, int state, Pageable pageable);
 
     List<AnnonceEntity> findByPrixBetween(double prixMin, double prixMax);
 
