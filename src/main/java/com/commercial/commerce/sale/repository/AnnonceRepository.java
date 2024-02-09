@@ -28,7 +28,7 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     List<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state);
 
-    Page<AnnonceEntity> findByVendeurIdvendeurAndState(Long idvendeur, int state, Pageable pageable);
+    Page<AnnonceEntity> findByVendeurIdvendeurAndStateIn(Long idvendeur, List<Integer> states, Pageable pageable);
 
     Page<AnnonceEntity> findByModeleTypeIdAndState(String idtype, int state, Pageable pageable);
 

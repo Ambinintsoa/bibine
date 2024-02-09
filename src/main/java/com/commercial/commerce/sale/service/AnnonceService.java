@@ -204,8 +204,11 @@ public class AnnonceService {
     }
 
     public List<AnnonceEntity> getAnnoncesByVendeur(Long user, int offset, int limit) {
+        List<Integer> states = new ArrayList<>();
+        states.add(1);
+        states.add(2);
         List<AnnonceEntity> annonce = annonceRepository
-                .findByVendeurIdvendeurAndState(user, 1, PageRequest.of(offset, limit)).getContent();
+                .findByVendeurIdvendeurAndStateIn(user, states, PageRequest.of(offset, limit)).getContent();
         User userEntity = null;
         for (AnnonceEntity annonceEntity : annonce) {
             userEntity = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
