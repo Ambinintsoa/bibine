@@ -71,8 +71,7 @@ public class MessageService {
     public HashMap<String, Message> triDateMessage(HashMap<String, Message> map) {
         List<Map.Entry<String, Message>> entryList = new ArrayList<>(map.entrySet());
 
-        Collections.sort(entryList,
-                (entry1, entry2) -> entry2.getValue().getDate().compareTo(entry1.getValue().getDate()));
+        entryList.sort((entry1, entry2) -> entry2.getValue().getDate().compareTo(entry1.getValue().getDate()));
 
         HashMap<String, Message> sortedMessageMap = new LinkedHashMap<>();
         for (Map.Entry<String, Message> entry : entryList) {
