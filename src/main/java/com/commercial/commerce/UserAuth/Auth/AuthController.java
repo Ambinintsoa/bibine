@@ -60,6 +60,29 @@ public class AuthController extends Controller {
         return ResponseEntity.ok(!service.chekcIfAlreadyExist(email));
     }
 
+    @GetMapping("/user/{iduser}")
+    public ResponseEntity<ApiResponse<User>> checkByID(HttpServletRequest request,
+            @PathVariable Long iduser) {
+        if (this.isTokenValid(refreshTokenService.splitToken(request.getHeader("Authorization")),
+                iduser) == false) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new com.commercial.commerce.response.Status("error", "not the user"),
+                            LocalDateTime.now()));
+
+        }
+        try
+
+        {
+            return createResponseEntity(service.getUser(iduser).get(), "Announcement created successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, new com.commercial.commerce.response.Status("error", e.getMessage()),
+                            LocalDateTime.now()));
+        }
+
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request) {

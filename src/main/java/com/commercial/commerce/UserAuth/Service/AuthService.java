@@ -89,6 +89,12 @@ public class AuthService {
                 return getAuthResponse(user);
         }
 
+        public Optional<User> getUser(long request) {
+                System.out.println(request);
+                return repository.findById(request);
+
+        }
+
         public AuthenticationResponse authenticateAdmin(AuthenticationRequest request) throws Exception {
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));

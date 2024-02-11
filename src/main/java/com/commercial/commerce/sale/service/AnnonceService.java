@@ -67,7 +67,10 @@ public class AnnonceService {
     }
 
     public List<AnnonceEntity> getAllEntity() {
-        List<AnnonceEntity> annonces = annonceRepository.findAllByState(1);
+        List<Integer> state = new ArrayList<>();
+        state.add(1);
+        state.add(2);
+        List<AnnonceEntity> annonces = annonceRepository.findAllByStateIn(state);
         User user = null;
         for (AnnonceEntity annonceEntity : annonces) {
             user = authService.findById(annonceEntity.getVendeur().getIdvendeur()).get();
@@ -368,7 +371,7 @@ public class AnnonceService {
     }
 
     public List<AnnonceEntity> research(Parameter parametre) {
-        List<AnnonceEntity> entity0 = annonceRepository.findAll();
+        List<AnnonceEntity> entity0 = this.getAllEntity();
 
         List<AnnonceEntity> entity1 = null;
         List<AnnonceEntity> entity = null;

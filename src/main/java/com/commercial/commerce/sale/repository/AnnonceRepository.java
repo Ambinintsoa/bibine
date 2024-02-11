@@ -56,6 +56,8 @@ public interface AnnonceRepository extends MongoRepository<AnnonceEntity, String
 
     List<AnnonceEntity> findByDateGreaterThanEqual(LocalDateTime dateInf);
 
+    List<AnnonceEntity> findAllByStateIn(List<Integer> state);
+
     List<AnnonceEntity> findAllByState(int state);
 
     long countByState(int state);

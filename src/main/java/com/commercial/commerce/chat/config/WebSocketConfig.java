@@ -20,7 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
-                .setAllowedOrigins("http://localhost:8100", "http://localhost")
+                .setAllowedOrigins("http://localhost:8100", "http://localhost",
+                        "https://front-office-bibine.netlify.app")
                 .setHandshakeHandler(new UserHandshakeHandler())
                 .withSockJS();
     }
